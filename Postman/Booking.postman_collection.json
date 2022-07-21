@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "01c14696-15ca-4900-8db7-0c43cfcd3d28",
+		"name": "Booking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a Booking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const echoPostRequest = {\r",
+							"  url: 'restful-booker.herokuapp.com/auth',\r",
+							"  method: 'POST',\r",
+							"  header: 'Content-Type:application/json',\r",
+							"  body: {\r",
+							"    mode: 'application/json',\r",
+							"    raw: JSON.stringify({\r",
+							"        \"username\" : \"admin\",\r",
+							"        \"password\" : \"password123\"\r",
+							"    })\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							" pm.sendRequest(echoPostRequest, function (err, res) {\r",
+							"    console.log(err ? err : res.json());\r",
+							"        if (err === null) {\r",
+							"            var responseJson = res.json();\r",
+							"            pm.environment.set('token', responseJson.token)\r",
+							"            console.log('Saving the token')\r",
+							"        }\r",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response ok\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Booking ok\", () => {\r",
+							"  const jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.bookingid).to.be.a(\"number\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"Jim\",\r\n    \"lastname\":\"Brown\",\r\n    \"totalprice\":\"111\",\r\n    \"depositpaid\":\"true\",\r\n    \"bookingdates\": {\r\n        \"checkin\":\"2018-01-01\",\r\n        \"checkout\":\"2019-01-01\"\r\n    },\r\n    \"additionalneeds\":\"Breakfast\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
