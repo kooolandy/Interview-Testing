@@ -1,4 +1,4 @@
-# ADP_Testing
+# Interview Testing
 Tests for Interview
 
 The handling of the UI elements is basic and only covers the used elements.
